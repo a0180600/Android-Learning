@@ -24,6 +24,13 @@
             </intent-filter>
         </receiver>
 
+        <receiver android:name=".MyBroadcastReceiver" >
+            <intent-filter>
+                <action android:name="com.example.a0180600.broadcasttext.MY_BROADCAST" />
+
+            </intent-filter>
+        </receiver>
+
     </application>
 
 </manifest>

@@ -42,10 +42,10 @@ public class MainActivity extends Activity {
             ConnectivityManager connectivityManager = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
             NetworkInfo networkInfo = connectivityManager.getActiveNetworkInfo();
             if (networkInfo != null && networkInfo.isAvailable()) {
-                Toast.makeText(context, "network is available", Toast.LENGTH_SHORT);
+                Toast.makeText(context, "network is available", Toast.LENGTH_SHORT).show();
             } else {
 
-                Toast.makeText(context, "network is unavailable", Toast.LENGTH_SHORT);
+                Toast.makeText(context, "network is unavailable", Toast.LENGTH_SHORT).show();
             }
         }
 

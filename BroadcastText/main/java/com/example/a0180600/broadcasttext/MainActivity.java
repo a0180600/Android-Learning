@@ -8,6 +8,7 @@ import android.content.IntentFilter;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.Bundle;
+import android.support.v4.content.LocalBroadcastManager;
 import android.view.View;
 import android.widget.Button;
 import android.widget.Toast;
@@ -18,44 +19,44 @@ import android.widget.Toast;
 public class MainActivity extends Activity {
 
     private IntentFilter intentFilter;
-    private NetworkChangeReceiver networkChangeReceiver;
+    private LoaclReceiver localReceiver;
+    private LocalBroadcastManager localBroadcastManager;
 
     @Override
     protected void onCreate(Bundle savadInstanceState) {
         super.onCreate(savadInstanceState);
         setContentView(R.layout.activity_main);
 
+        localBroadcastManager = LocalBroadcastManager.getInstance(this);
         Button button = (Button) findViewById(R.id.button);
         button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent("com.example.a0180600.broadcasttext.MY_BROADCAST");
-                sendBroadcast(intent);
+                Intent intent = new Intent("com.example.a0180600.broadcasttext.LOCAL_BROADCAST");
+                // 发送本地广播
+                localBroadcastManager.sendBroadcast(intent);
             }
         });
+
+        intentFilter = new IntentFilter();
+        intentFilter.addAction("com.example.a0180600.broadcasttext.LOCAL_BROADCAST");
+        // 注册本地广播监听器
+        localReceiver = new LoaclReceiver();
+        localBroadcastManager.registerReceiver(localReceiver, intentFilter);
 
     }
 
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        unregisterReceiver(networkChangeReceiver);
+        localBroadcastManager.unregisterReceiver(localReceiver);
     }
 
-    class NetworkChangeReceiver extends BroadcastReceiver {
-
+    class LoaclReceiver extends BroadcastReceiver {
         @Override
         public void onReceive(Context context, Intent intent) {
-            ConnectivityManager connectivityManager = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
-            NetworkInfo networkInfo = connectivityManager.getActiveNetworkInfo();
-            if (networkInfo != null && networkInfo.isAvailable()) {
-                Toast.makeText(context, "network is available", Toast.LENGTH_SHORT).show();
-            } else {
-
-                Toast.makeText(context, "network is unavailable", Toast.LENGTH_SHORT).show();
-            }
+            Toast.makeText(context, "received local broadcast", Toast.LENGTH_SHORT).show();
         }
-
     }
 
 }

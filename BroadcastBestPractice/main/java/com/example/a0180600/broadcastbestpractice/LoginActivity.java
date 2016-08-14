@@ -23,6 +23,7 @@ public class LoginActivity extends BaseActivity {
     private SharedPreferences.Editor editor;
     private CheckBox rememberPass;
 
+    @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.login);

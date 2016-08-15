@@ -44,4 +44,12 @@
         android:textAllCaps="false"
         />
 
+    <Button
+        android:id="@+id/replace_data"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Replace data"
+        android:textAllCaps="false"
+        />
+
 </LinearLayout>

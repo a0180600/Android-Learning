@@ -21,7 +21,7 @@ public class MainActivity extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        dbHelper = new MyDatabaseHelper(this, "BookStore.db", null, 3);
+        dbHelper = new MyDatabaseHelper(this, "BookStore.db", null, 1);
 
         /**
          * 创建数据库

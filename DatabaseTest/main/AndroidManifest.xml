@@ -16,6 +16,13 @@
             </intent-filter>
         </activity>
 
+        <provider
+            android:name="com.example.a0180600.databasetest.DatabaseProvider"
+            android:authorities="com.example.a0180600.databasetest.provider"
+            android:exported="true"
+            >
+        </provider>
+
     </application>
 
 </manifest>

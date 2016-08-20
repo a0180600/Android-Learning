@@ -1,6 +1,7 @@
 package com.example.a0180600.smstest;
 
 import android.app.Activity;
+import android.app.PendingIntent;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
@@ -12,6 +13,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
+import android.widget.Toast;
 
 /**
  * Created by a0180600 on 16-8-20.
@@ -27,6 +29,9 @@ public class MainActivify extends Activity {
     private EditText to;
     private EditText msgInput;
     private Button send;
+
+    private IntentFilter sendFilter;
+    private SendStatusReceiver sendStatusReceiver;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -52,12 +57,28 @@ public class MainActivify extends Activity {
                         msgInput.getText().toString(), null, null);
             }
         });
+
+        sendFilter = new IntentFilter();
+        sendFilter.addAction("SENT_SMS_ACTION");
+        sendStatusReceiver = new SendStatusReceiver();
+        registerReceiver(sendStatusReceiver, sendFilter);
+        send.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                SmsManager smsManager = SmsManager.getDefault();
+                Intent sentIntent = new Intent("SENT_SMS_ACTION");
+                PendingIntent pi = PendingIntent.getBroadcast(MainActivify.this, 0, sentIntent,0);
+                smsManager.sendTextMessage(to.getText().toString(), null,
+                        msgInput.getText().toString(), pi, null);
+            }
+        });
     }
 
     @Override
     protected void onDestroy() {
         super.onDestroy();
         unregisterReceiver(messageReceiver);
+        unregisterReceiver(sendStatusReceiver);
     }
 
     class  MessageReceiver extends BroadcastReceiver {
@@ -79,6 +100,18 @@ public class MainActivify extends Activity {
             content.setText(fullMessage);
         }
 
+    }
+
+    class SendStatusReceiver extends BroadcastReceiver {
+
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            if (getResultCode() == RESULT_OK) {
+                Toast.makeText(context, "Send succeed", Toast.LENGTH_SHORT).show();
+            } else {
+                Toast.makeText(context, "Send failed", Toast.LENGTH_SHORT).show();
+            }
+        }
     }
 
 }

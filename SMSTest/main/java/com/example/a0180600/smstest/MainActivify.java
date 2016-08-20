@@ -6,7 +6,11 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.os.Bundle;
+import android.telephony.SmsManager;
 import android.telephony.SmsMessage;
+import android.view.View;
+import android.widget.Button;
+import android.widget.EditText;
 import android.widget.TextView;
 
 /**
@@ -20,6 +24,10 @@ public class MainActivify extends Activity {
     private IntentFilter receiveFilter;
     private MessageReceiver messageReceiver;
 
+    private EditText to;
+    private EditText msgInput;
+    private Button send;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -32,6 +40,18 @@ public class MainActivify extends Activity {
         receiveFilter.addAction("android.provider.Telephony.SMS_RECEIVED");
         messageReceiver = new MessageReceiver();
         registerReceiver(messageReceiver, receiveFilter);
+
+        to = (EditText) findViewById(R.id.to);
+        msgInput = (EditText) findViewById(R.id.msg_input);
+        send = (Button) findViewById(R.id.send);
+        send.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                SmsManager smsManager = SmsManager.getDefault();
+                smsManager.sendTextMessage(to.getText().toString(), null,
+                        msgInput.getText().toString(), null, null);
+            }
+        });
     }
 
     @Override

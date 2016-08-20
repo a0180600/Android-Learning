@@ -2,6 +2,7 @@
     package="com.example.a0180600.smstest">
     
     <uses-permission android:name="android.permission.RECEIVE_SMS" />
+    <uses-permission android:name="android.permission.SEND_SMS" />
 
     <application
         android:allowBackup="true"

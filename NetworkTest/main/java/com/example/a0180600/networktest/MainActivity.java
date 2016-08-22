@@ -1,6 +1,7 @@
 package com.example.a0180600.networktest;
 
 import android.app.Activity;
+import android.content.Entity;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
@@ -46,8 +47,34 @@ public class MainActivity extends Activity implements View.OnClickListener {
     @Override
     public void onClick(View v) {
         if (v.getId() == R.id.send_request) {
-            sendRequestWithHttpURLConnection();
+            // sendRequestWithHttpURLConnection();
+            sendRequestWithHttpClient();
         }
+    }
+
+    private void sendRequestWithHttpClient() {
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                try {
+                    HttpClient httpClient = new DefaultHttpClient();
+                    HttpGet httpGet = new HttpGet("http://www.baidu.com");
+                    HttpResponse httpResponse = httpClient.execute(httpGet);
+                    if (httpResponse.getStatusLine().getStatusCode() == 200) {
+                        // 请求和响应都成功了
+                        HttpEntity entity = httpResponse.getEntity();
+                        String response = EntityUtils.toString(entity, "utf-8");
+                        Message message = new Message();
+                        message.what = SHOW_RESPONSE;
+                        // 将服务器返回的结果存放在Message
+                        message.obj = response.toString();
+                        handler.sendMessage(message);
+                    }
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
+        }).start();
     }
 
     private void sendRequestWithHttpURLConnection() {
